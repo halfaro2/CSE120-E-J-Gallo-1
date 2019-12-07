@@ -1,5 +1,7 @@
 package com.example.ejgallodts;
 
+import com.google.type.Date;
+
 public class DTS {
 
     String defect_impact;
@@ -32,7 +34,7 @@ public void DTS(){
         description = "N/A";
         id = -1;
         incident_class = false;
-        incident_date = "99-99-9999";
+        incident_date = "N/A";
         item_num = "N/A";
         lot_num = -1;
         material_group = "N/A";

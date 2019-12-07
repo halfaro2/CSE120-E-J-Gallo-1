@@ -1,5 +1,6 @@
 package com.example.ejgallodts;
 
+import android.graphics.Color;
 import android.nfc.Tag;
 import android.os.Bundle;
 
@@ -10,6 +11,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabItem;
 import com.google.android.material.tabs.TabLayout;
 
+import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,6 +23,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,12 +36,15 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.Collection;
+import java.util.Date;
 
 public class HomeActivity extends AppCompatActivity {
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     DTS dts1 = new DTS(); DTS dts2 = new DTS(); DTS dts3 = new DTS(); DTS dts4 = new DTS(); DTS dts5 = new DTS(); DTS dts6 = new DTS(); DTS dts7 = new DTS(); DTS dts8 = new DTS(); DTS dts9 = new DTS(); DTS dts10 = new DTS();
     Button DTS_1, DTS_2, DTS_3, DTS_4, DTS_5, DTS_6, DTS_7, DTS_8, DTS_9, DTS_10;
+    ScrollView scroll;
+    DTS dtsarray[] = new DTS[5];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,17 +55,31 @@ public class HomeActivity extends AppCompatActivity {
         viewPager.setAdapter(sectionsPagerAdapter);
         TabLayout tabs = findViewById(R.id.tabs);
         tabs.setupWithViewPager(viewPager);
+        scroll = findViewById(R.id.scrollView);
+
+        final Button buttonArray[] = new Button[5];
+
         DTS_1 = findViewById(R.id.DTS_1);
         DTS_2 = findViewById(R.id.DTS_2);
-        //DTS_3 = findViewById(R.id.DTS_3);
-       // DTS_4 = findViewById(R.id.DTS_4);
-       // DTS_5 = findViewById(R.id.DTS_5);
+        DTS_3 = findViewById(R.id.DTS_3);
+        DTS_4 = findViewById(R.id.DTS_4);
+        DTS_5 = findViewById(R.id.DTS_5);
        // DTS_6 = findViewById(R.id.DTS_6);
        // DTS_7 = findViewById(R.id.DTS_7);
        // DTS_8 = findViewById(R.id.DTS_8);
        // DTS_9 = findViewById(R.id.DTS_9);
        // DTS_10 = findViewById(R.id.DTS_10);
 
+        buttonArray[0] = DTS_1;
+        buttonArray[1] = DTS_1;
+        buttonArray[2] = DTS_1;
+        buttonArray[3] = DTS_1;
+        buttonArray[4] = DTS_1;
+        dtsarray[0] = dts1;
+        dtsarray[1] = dts1;
+        dtsarray[2] = dts1;
+        dtsarray[3] = dts1;
+        dtsarray[4] = dts1;
         /*
         DocumentReference docRef = db.collection("Incidents").document();
         db.collection("Incidents")
@@ -102,14 +122,47 @@ public class HomeActivity extends AppCompatActivity {
                                 if (task.isSuccessful()) {
                                     for (QueryDocumentSnapshot document : task.getResult()) {
                                         //Log.d(TAG, document.getId() + " => " + document.getData());
-                                        dts1.setIncident_date(document.getString("incident_date"));
+
                                         dts1.setDefect_name(document.getString("defect_name"));
                                         dts1.setPriority((long) document.get("priority"));
-                                        DTS_1.setText(dts1.getIncident_date() + " " + dts1.getDefect_name() + " " + dts1.getPriority());
-                                        dts2.setIncident_date(document.getString("incident_date"));
+                                        String dts1text = "Name: " + dts1.getDefect_name() + "| Priority: " + dts1.getPriority();
+                                        DTS_1.setText(dts1text);
+                                        if (dts1.getPriority() == 1) {
+                                            DTS_1.setBackgroundColor(0xFFB83838);
+                                        }
+
                                         dts2.setDefect_name(document.getString("defect_name"));
                                         dts2.setPriority((long) document.get("priority"));
-                                        DTS_2.setText(dts2.getIncident_date() + " " + dts2.getDefect_name() + " " + dts2.getPriority());
+                                        String dts2text = "Name: " + dts2.getDefect_name() + "| Priority: " + dts2.getPriority();
+                                        DTS_2.setText(dts2text);
+                                        if (dts1.getPriority() == 1) {
+                                            DTS_2.setBackgroundColor(0xFFB83838);
+                                        }
+
+                                        dts3.setDefect_name(document.getString("defect_name"));
+                                        dts3.setPriority((long) document.get("priority"));
+                                        String dts3text = "Name: " + dts3.getDefect_name() + "| Priority: " + dts3.getPriority();
+                                        DTS_3.setText(dts3text);
+                                        if (dts1.getPriority() == 1) {
+                                            DTS_3.setBackgroundColor(0xFFB83838);
+                                        }
+
+                                        dts4.setDefect_name(document.getString("defect_name"));
+                                        dts4.setPriority((long) document.get("priority"));
+                                        String dts4text = "Name: " + dts4.getDefect_name() + "| Priority: " + dts4.getPriority();
+                                        DTS_4.setText(dts4text);
+                                        if (dts1.getPriority() == 1) {
+                                            DTS_4.setBackgroundColor(0xFFB83838);
+                                        }
+
+                                        dts5.setDefect_name(document.getString("defect_name"));
+                                        dts5.setPriority((long) document.get("priority"));
+                                        String dts5text = "Name: " + dts5.getDefect_name() + "| Priority: " + dts5.getPriority();
+                                        DTS_5.setText(dts5text);
+                                        if (dts1.getPriority() == 1) {
+                                            DTS_5.setBackgroundColor(0xFFB83838);
+                                        }
+
                                         //Toast.makeText(HomeActivity.this, dts1.getDefect_name(), Toast.LENGTH_SHORT);
                                     }
                                 } else {
@@ -117,6 +170,7 @@ public class HomeActivity extends AppCompatActivity {
                                 }
                             }
                         });
+
 
 
     }
