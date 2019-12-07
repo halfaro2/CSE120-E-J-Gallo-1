@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">EJGalloDTS</string>
     <string name="title_activity_home">HomeActivity</string>
-    <string name="tab_text_1">Tab 1</string>
-    <string name="tab_text_2">Tab 2</string>
+    <string name="Main">Main</string>
+    <string name="Priority_1">Priority 1</string>
+    <string name="Priority_2">Priority 2</string>
+    <string name="Priority_3">Priority 3</string>
+    <string name="Overdue">Overdue</string>
 </resources>

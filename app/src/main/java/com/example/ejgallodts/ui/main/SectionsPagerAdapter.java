@@ -17,7 +17,7 @@ import com.example.ejgallodts.R;
 public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
     @StringRes
-    private static final int[] TAB_TITLES = new int[]{R.string.tab_text_1, R.string.tab_text_2};
+    private static final int[] TAB_TITLES = new int[]{R.string.Main, R.string.Priority_1, R.string.Priority_2, R.string.Priority_3, R.string.Overdue};
     private final Context mContext;
 
     public SectionsPagerAdapter(Context context, FragmentManager fm) {
