@@ -1,5 +1,6 @@
 package com.example.ejgallodts;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.nfc.Tag;
 import android.os.Bundle;
@@ -23,6 +24,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -43,8 +46,9 @@ public class HomeActivity extends AppCompatActivity {
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
     DTS dts1 = new DTS(); DTS dts2 = new DTS(); DTS dts3 = new DTS(); DTS dts4 = new DTS(); DTS dts5 = new DTS(); DTS dts6 = new DTS(); DTS dts7 = new DTS(); DTS dts8 = new DTS(); DTS dts9 = new DTS(); DTS dts10 = new DTS();
     Button DTS_1, DTS_2, DTS_3, DTS_4, DTS_5, DTS_6, DTS_7, DTS_8, DTS_9, DTS_10;
+    ImageButton newDTS;
     ScrollView scroll;
-    DTS dtsarray[] = new DTS[5];
+    DTS dtsarray[] = new DTS[10];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,30 +60,52 @@ public class HomeActivity extends AppCompatActivity {
         TabLayout tabs = findViewById(R.id.tabs);
         tabs.setupWithViewPager(viewPager);
         scroll = findViewById(R.id.scrollView);
+        final ProgressBar loadDTS = findViewById(R.id.loadingDTS);
+        newDTS = findViewById(R.id.newDTS);
 
-        final Button buttonArray[] = new Button[5];
+        final Button buttonArray[] = new Button[10];
 
         DTS_1 = findViewById(R.id.DTS_1);
         DTS_2 = findViewById(R.id.DTS_2);
         DTS_3 = findViewById(R.id.DTS_3);
         DTS_4 = findViewById(R.id.DTS_4);
         DTS_5 = findViewById(R.id.DTS_5);
+        DTS_6 = findViewById(R.id.DTS_6);
+        DTS_7 = findViewById(R.id.DTS_7);
+        DTS_8 = findViewById(R.id.DTS_8);
+        DTS_9 = findViewById(R.id.DTS_9);
+        DTS_10 = findViewById(R.id.DTS_10);
        // DTS_6 = findViewById(R.id.DTS_6);
        // DTS_7 = findViewById(R.id.DTS_7);
        // DTS_8 = findViewById(R.id.DTS_8);
        // DTS_9 = findViewById(R.id.DTS_9);
        // DTS_10 = findViewById(R.id.DTS_10);
 
+        //ten at a time...
         buttonArray[0] = DTS_1;
-        buttonArray[1] = DTS_1;
-        buttonArray[2] = DTS_1;
-        buttonArray[3] = DTS_1;
-        buttonArray[4] = DTS_1;
+        buttonArray[1] = DTS_2;
+        buttonArray[2] = DTS_3;
+        buttonArray[3] = DTS_4;
+        buttonArray[4] = DTS_5;
+        buttonArray[5] = DTS_6;
+        buttonArray[6] = DTS_7;
+        buttonArray[7] = DTS_8;
+        buttonArray[8] = DTS_9;
+        buttonArray[9] = DTS_10;
         dtsarray[0] = dts1;
-        dtsarray[1] = dts1;
-        dtsarray[2] = dts1;
-        dtsarray[3] = dts1;
-        dtsarray[4] = dts1;
+        dtsarray[1] = dts2;
+        dtsarray[2] = dts3;
+        dtsarray[3] = dts4;
+        dtsarray[4] = dts5;
+        dtsarray[5] = dts6;
+        dtsarray[6] = dts7;
+        dtsarray[7] = dts8;
+        dtsarray[8] = dts9;
+        dtsarray[9] = dts10;
+
+        for (int i = 0; i < 10; i++) {
+            buttonArray[i].setVisibility(View.GONE);
+        }
         /*
         DocumentReference docRef = db.collection("Incidents").document();
         db.collection("Incidents")
@@ -110,7 +136,7 @@ public class HomeActivity extends AppCompatActivity {
         CollectionReference dtsRef = db.collection("Incidents");
         //Query query = dtsRef.whereEqualTo("priority", 1); // Simple Query Example (no execution/results)
 
-
+        loadDTS.setVisibility(View.VISIBLE);
         //Priority 1 TAB ///////////////////////////////////////////////
                 db.collection("Incidents")
                         .whereEqualTo("priority", 1)
@@ -120,58 +146,39 @@ public class HomeActivity extends AppCompatActivity {
                             @Override
                             public void onComplete(@NonNull Task<QuerySnapshot> task) {
                                 if (task.isSuccessful()) {
+                                    int i = 0;
                                     for (QueryDocumentSnapshot document : task.getResult()) {
                                         //Log.d(TAG, document.getId() + " => " + document.getData());
 
-                                        dts1.setDefect_name(document.getString("defect_name"));
-                                        dts1.setPriority((long) document.get("priority"));
-                                        String dts1text = "Name: " + dts1.getDefect_name() + "| Priority: " + dts1.getPriority();
-                                        DTS_1.setText(dts1text);
-                                        if (dts1.getPriority() == 1) {
-                                            DTS_1.setBackgroundColor(0xFFB83838);
+                                        dtsarray[i].setDefect_name(document.getString("defect_name"));
+                                        dtsarray[i].setPriority((long) document.get("priority"));
+                                        String dts1text = "Name: " +  dtsarray[i].getDefect_name() + " | Priority: " +  dtsarray[i].getPriority();
+                                        buttonArray[i].setText(dts1text);
+                                        buttonArray[i].setVisibility(View.VISIBLE);
+                                        if ( dtsarray[i].getPriority() == 1) {
+                                            buttonArray[i].setBackgroundColor(0xC8C44848);
+                                        } else if (dtsarray[i].getPriority() == 2) {
+                                            buttonArray[i].setBackgroundColor(0xC8D86E26);
+                                        } else if (dtsarray[i].getPriority() == 3) {
+                                            buttonArray[i].setBackgroundColor(0xC8DAC439);
                                         }
+                                        i++;
 
-                                        dts2.setDefect_name(document.getString("defect_name"));
-                                        dts2.setPriority((long) document.get("priority"));
-                                        String dts2text = "Name: " + dts2.getDefect_name() + "| Priority: " + dts2.getPriority();
-                                        DTS_2.setText(dts2text);
-                                        if (dts1.getPriority() == 1) {
-                                            DTS_2.setBackgroundColor(0xFFB83838);
-                                        }
-
-                                        dts3.setDefect_name(document.getString("defect_name"));
-                                        dts3.setPriority((long) document.get("priority"));
-                                        String dts3text = "Name: " + dts3.getDefect_name() + "| Priority: " + dts3.getPriority();
-                                        DTS_3.setText(dts3text);
-                                        if (dts1.getPriority() == 1) {
-                                            DTS_3.setBackgroundColor(0xFFB83838);
-                                        }
-
-                                        dts4.setDefect_name(document.getString("defect_name"));
-                                        dts4.setPriority((long) document.get("priority"));
-                                        String dts4text = "Name: " + dts4.getDefect_name() + "| Priority: " + dts4.getPriority();
-                                        DTS_4.setText(dts4text);
-                                        if (dts1.getPriority() == 1) {
-                                            DTS_4.setBackgroundColor(0xFFB83838);
-                                        }
-
-                                        dts5.setDefect_name(document.getString("defect_name"));
-                                        dts5.setPriority((long) document.get("priority"));
-                                        String dts5text = "Name: " + dts5.getDefect_name() + "| Priority: " + dts5.getPriority();
-                                        DTS_5.setText(dts5text);
-                                        if (dts1.getPriority() == 1) {
-                                            DTS_5.setBackgroundColor(0xFFB83838);
-                                        }
-
-                                        //Toast.makeText(HomeActivity.this, dts1.getDefect_name(), Toast.LENGTH_SHORT);
                                     }
+                                    loadDTS.setVisibility(View.GONE);
                                 } else {
                                     Log.d("TAG", "Error getting documents: ", task.getException());
                                 }
                             }
                         });
 
-
+    newDTS.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Intent i = new Intent(HomeActivity.this, SubmissionActivity.class);
+            startActivity(i);
+        }
+    });
 
     }
 
