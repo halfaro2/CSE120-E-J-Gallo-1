@@ -3,10 +3,12 @@ package com.example.ejgallodts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -25,24 +27,32 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 public class ViewingActivity extends AppCompatActivity {
 
-    final static String title = "New Defect Broadcasted";
-    final static String CHANNEL_ID = "pushing";
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-    NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
-            .setSmallIcon(R.drawable.nextpage)
-            .setContentTitle(title)
-            .setContentText("Admin(s) Have Pushed a new DTS")
-            .setStyle(new NotificationCompat.BigTextStyle().bigText("Admin(s) Have Pushed a new DTS"))
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+    private void createNotificationChannel() {
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is new and not in the support library
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = getString(R.string.Channel_Name);
+            String description = getString(R.string.Channel_Desc);
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel("pushing", name, importance);
+            channel.setDescription(description);
+            // Register the channel with the system; you can't change the importance
+            // or other notification behaviors after this
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+    }
 
-    Notification built = new Notification();
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     TextView viewName, viewImpact, viewDepartment, viewDescription, viewIncidentClass, viewIncidentDate, viewOverdue, viewItemNum, viewLotNum, viewMaterial, viewOrderkey, viewPOnum, viewPrimLoc, viewPriority, viewProdCause, viewSuppCause, viewSecLoc, viewSite, viewSubDepartment, viewSupplier, viewRecommendation;
     Uri imageUploaded;
     ImageView imgView;
+    long id_const;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        createNotificationChannel();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_viewing);
         Button push = findViewById(R.id.pushButton);
@@ -74,6 +84,7 @@ public class ViewingActivity extends AppCompatActivity {
         if (id < 0) {
             //trap exception...
         }
+        id_const = id;
 
         boolean isAdmin = intent.getBooleanExtra("isAdmin", false);
         if (isAdmin) {
@@ -137,12 +148,28 @@ public class ViewingActivity extends AppCompatActivity {
                     }
                 });
 
-
         push.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                Intent in = new Intent(ViewingActivity.this, ViewingActivity.class);
+                in.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                in.putExtra("id", id_const);
+                PendingIntent pendingIntent = PendingIntent.getActivity(ViewingActivity.this, 0, in, 0);
+                final String title = "New Defect Broadcasted";
+                final String CHANNEL_ID = "pushing";
+                NotificationManagerCompat notificationManager = NotificationManagerCompat.from(ViewingActivity.this);
+                NotificationCompat.Builder builder = new NotificationCompat.Builder(ViewingActivity.this, CHANNEL_ID)
+                        .setSmallIcon(R.drawable.nextpage)
+                        .setContentTitle(title)
+                        .setContentText("Admin(s) Have Pushed a new DTS")
+                        .setStyle(new NotificationCompat.BigTextStyle().bigText("Admin(s) Have Pushed a new DTS"))
+                        .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                        .setContentIntent(pendingIntent)
+                        .setAutoCancel(true);
+
                 builder.build();
-                    mNotificationManager.notify(0, builder.build());
+                    notificationManager.notify(0, builder.build());
                 }
         });
 
