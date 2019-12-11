@@ -2,10 +2,13 @@
     <string name="app_name">EJGalloDTS</string>
     <string name="title_activity_home">HomeActivity</string>
     <string name="Main">Main</string>
-    <string name="Priority_1">Priority 1</string>
-    <string name="Priority_2">Priority 2</string>
-    <string name="Priority_3">Priority 3</string>
+    <string name="Priority_1">Major</string>
+    <string name="Priority_2">Medium</string>
+    <string name="Channel_Name">Pushing</string>
+    <string name="Channel_Desc">DTS Pushed to E and J Gallo</string>
+    <string name="Priority_3">Minor</string>
     <string name="Overdue">Overdue</string>
+    <string name="Defect_Tracking_System_Distribution">Defect Tracking System - Distribution</string>
     <string name="title_activity_submission">SubmissionActivity</string>
     <string name="large_text">
         "Material is the metaphor.\n\n"

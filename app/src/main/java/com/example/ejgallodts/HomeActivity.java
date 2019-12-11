@@ -1,32 +1,37 @@
 package com.example.ejgallodts;
 
-<<<<<<< HEAD
-=======
 import android.content.Intent;
 import android.graphics.Color;
+import android.icu.text.CaseMap;
 import android.nfc.Tag;
->>>>>>> 9d961b78557e496688a2fd1db26ef81ae920b996
 import android.os.Bundle;
 
+import com.example.ejgallodts.ui.main.SectionsPagerAdapter;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.tabs.TabItem;
 import com.google.android.material.tabs.TabLayout;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
+import android.widget.TextView;
 
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+
+import org.w3c.dom.Text;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -47,8 +52,14 @@ public class HomeActivity extends AppCompatActivity {
         TabLayout tabs = findViewById(R.id.tabs);
         tabs.setupWithViewPager(viewPager);
         scroll = findViewById(R.id.scrollView);
-        final ProgressBar loadDTS = findViewById(R.id.loadingDTS);
         newDTS = findViewById(R.id.newDTS);
+        TextView title = findViewById(R.id.title);
+
+        Intent i = getIntent();
+        boolean isAdmin = i.getBooleanExtra("isAdmin", false);
+        if (!isAdmin) {
+            title.setText("Defect Tracking System | User");
+        }
 
         final Button buttonArray[] = new Button[10];
 
@@ -62,11 +73,6 @@ public class HomeActivity extends AppCompatActivity {
         DTS_8 = findViewById(R.id.DTS_8);
         DTS_9 = findViewById(R.id.DTS_9);
         DTS_10 = findViewById(R.id.DTS_10);
-       // DTS_6 = findViewById(R.id.DTS_6);
-       // DTS_7 = findViewById(R.id.DTS_7);
-       // DTS_8 = findViewById(R.id.DTS_8);
-       // DTS_9 = findViewById(R.id.DTS_9);
-       // DTS_10 = findViewById(R.id.DTS_10);
 
         //ten at a time...
         buttonArray[0] = DTS_1;
@@ -90,27 +96,10 @@ public class HomeActivity extends AppCompatActivity {
         dtsarray[8] = dts9;
         dtsarray[9] = dts10;
 
-        for (int i = 0; i < 10; i++) {
-            buttonArray[i].setVisibility(View.GONE);
+        for (int j = 0; j < 10; j++) {
+            buttonArray[j].setVisibility(View.GONE);
+            buttonArray[j].setClickable(false);
         }
-        /*
-        DocumentReference docRef = db.collection("Incidents").document();
-        db.collection("Incidents")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()){
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.d(TAG, document.getId() + " => " + document.getData());
-                            }
-                        } else {
-                            Log.w(TAG, "Error receiving documents.", task.getException());
-                        }
-                    }
-                });
-
-         */
 
         TabItem mainTab = findViewById(R.id.mainTab);
         TabItem priorityTab1 = findViewById(R.id.priorityTab1);
@@ -118,46 +107,6 @@ public class HomeActivity extends AppCompatActivity {
         TabItem priorityTab3 = findViewById(R.id.priorityTab3);
         TabItem overdueTab = findViewById(R.id.overdueTab);
 
-        //tabs.addView(mainTab, 0); tabs.addView(priorityTab1, 1); tabs.addView(priorityTab2, 2); tabs.addView(priorityTab3, 3); tabs.addView(overdueTab, 4);
-
-        CollectionReference dtsRef = db.collection("Incidents");
-        //Query query = dtsRef.whereEqualTo("priority", 1); // Simple Query Example (no execution/results)
-
-        loadDTS.setVisibility(View.VISIBLE);
-        //Priority 1 TAB ///////////////////////////////////////////////
-                db.collection("Incidents")
-                        .whereEqualTo("priority", 1)
-                        .orderBy("incident_date")
-                        .get()
-                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                if (task.isSuccessful()) {
-                                    int i = 0;
-                                    for (QueryDocumentSnapshot document : task.getResult()) {
-                                        //Log.d(TAG, document.getId() + " => " + document.getData());
-
-                                        dtsarray[i].setDefect_name(document.getString("defect_name"));
-                                        dtsarray[i].setPriority((long) document.get("priority"));
-                                        String dts1text = "Name: " +  dtsarray[i].getDefect_name() + " | Priority: " +  dtsarray[i].getPriority();
-                                        buttonArray[i].setText(dts1text);
-                                        buttonArray[i].setVisibility(View.VISIBLE);
-                                        if ( dtsarray[i].getPriority() == 1) {
-                                            buttonArray[i].setBackgroundColor(0xC8C44848);
-                                        } else if (dtsarray[i].getPriority() == 2) {
-                                            buttonArray[i].setBackgroundColor(0xC8D86E26);
-                                        } else if (dtsarray[i].getPriority() == 3) {
-                                            buttonArray[i].setBackgroundColor(0xC8DAC439);
-                                        }
-                                        i++;
-
-                                    }
-                                    loadDTS.setVisibility(View.GONE);
-                                } else {
-                                    Log.d("TAG", "Error getting documents: ", task.getException());
-                                }
-                            }
-                        });
 
     newDTS.setOnClickListener(new View.OnClickListener() {
         @Override
@@ -168,7 +117,5 @@ public class HomeActivity extends AppCompatActivity {
     });
 
     }
-
-
 
 }

@@ -18,10 +18,10 @@
             android:id="@+id/ComplaintsReferrals"
             android:layout_width="346dp"
             android:layout_height="47dp"
-            android:layout_marginTop="10dp"
             android:layout_marginStart="16dp"
+            android:layout_marginTop="10dp"
             android:fontFamily="sans-serif-medium"
-            android:text="Complaints/Referrals"
+            android:text="Submit New Defect"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
             app:layout_constraintStart_toStartOf="parent"
             tools:layout_editor_absoluteY="16dp" />
@@ -107,15 +107,6 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/defectIncidentDate"
-            android:layout_width="338dp"
-            android:layout_height="45dp"
-            android:layout_marginStart="16dp"
-            android:hint="Incident Date"
-            app:layout_constraintStart_toStartOf="parent"
-            tools:layout_editor_absoluteY="565dp" />
-
         <CalendarView
             android:id="@+id/calendarView"
             android:layout_width="match_parent"
@@ -153,6 +144,7 @@
             android:layout_height="45dp"
             android:layout_marginStart="16dp"
             android:hint="Lot Number"
+            android:inputType="number"
             app:layout_constraintStart_toStartOf="parent"
             tools:layout_editor_absoluteY="787dp" />
 
@@ -187,6 +179,7 @@
             android:layout_height="45dp"
             android:layout_marginStart="16dp"
             android:hint="Order Key"
+            android:inputType="number"
             app:layout_constraintStart_toStartOf="parent"
             tools:layout_editor_absoluteY="1009" />
 
@@ -415,13 +408,30 @@
             android:id="@+id/loadsubmit"
             style="?android:attr/progressBarStyle"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:progressTint="#CA8337" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageButton
+                android:id="@+id/imageButton"
+                android:layout_width="84dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.498"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@android:drawable/ic_menu_camera" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <Button
             android:id="@+id/submitbutton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Button" />
+            android:text="Submit" />
 
         <LinearLayout
             android:layout_width="match_parent"

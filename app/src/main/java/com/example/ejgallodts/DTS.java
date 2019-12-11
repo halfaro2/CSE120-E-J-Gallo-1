@@ -1,5 +1,7 @@
 package com.example.ejgallodts;
 
+import android.net.Uri;
+
 import com.google.type.Date;
 
 public class DTS {
@@ -10,13 +12,13 @@ public class DTS {
     String description;
     long id;
     boolean incident_class;
-    String incident_date;
+    long incident_date;
     String item_num;
     long lot_num;
     String material_group;
     long orderkey;
     boolean overdue;
-    long po_num;
+    String po_num;
     String primary_location;
     long priority;
     String prod_suggested_cause;
@@ -26,6 +28,7 @@ public class DTS {
     String subdepartment;
     String supp_suggested_cause;
     String supplier;
+    Uri imageUri;
 
 public void DTS(){
         defect_impact = "N/A";
@@ -34,13 +37,13 @@ public void DTS(){
         description = "N/A";
         id = -1;
         incident_class = false;
-        incident_date = "N/A";
+        incident_date = -1;
         item_num = "N/A";
         lot_num = -1;
         material_group = "N/A";
         orderkey = -1;
         overdue = false;
-        po_num = -1;
+        po_num = "N/A";
         primary_location = "N/A";
         priority = 4;
         prod_suggested_cause = "N/A";
@@ -50,9 +53,10 @@ public void DTS(){
         subdepartment = "N/A";
         supp_suggested_cause = "N/A";
         supplier = "N/A";
+        imageUri = null;
     }
 
-    public void DTS(String def_im, String def_name, String dep, String desc, long ID, boolean inc_class, String inc_date, String itemNum, long lotNum, String mat_group, long orderKey, boolean overDue, long ponum, String prim_loc, long priornum, String prod_sugg, String rec, String sec_loc, String Site, String subdept, String supp_sugg, String supp){
+    public void DTS(String def_im, String def_name, String dep, String desc, long ID, boolean inc_class, long inc_date, String itemNum, long lotNum, String mat_group, long orderKey, boolean overDue, String ponum, String prim_loc, long priornum, String prod_sugg, String rec, String sec_loc, String Site, String subdept, String supp_sugg, String supp, Uri imageUri){
         defect_impact = def_im;
         defect_name = def_name;
         department = dep;
@@ -75,6 +79,7 @@ public void DTS(){
         subdepartment = subdept;
         supp_suggested_cause = supp_sugg;
         supplier = supp;
+        this.imageUri = imageUri;
     }
 
     // Setters ////////////////////////////////////////////////////////////////////////////////////
@@ -103,7 +108,7 @@ public void DTS(){
         incident_class = inc_class;
     }
 
-    public void setIncident_date(String inc_date) {
+    public void setIncident_date(long inc_date) {
         incident_date = inc_date;
     }
 
@@ -127,7 +132,7 @@ public void DTS(){
         overdue = overDue;
     }
 
-    public void setPo_num(long ponum) {
+    public void setPo_num(String ponum) {
         po_num = ponum;
     }
 
@@ -167,6 +172,8 @@ public void DTS(){
         supplier = supp;
     }
 
+    public void setImageUri(Uri imageUri) {this.imageUri = imageUri;}
+
     // Getters ////////////////////////////////////////////////////////////////////////////////////
 
     public String getDefect_impact() {
@@ -193,7 +200,7 @@ public void DTS(){
         return incident_class;
     }
 
-    public String getIncident_date() {
+    public long getIncident_date() {
         return incident_date;
     }
 
@@ -217,7 +224,7 @@ public void DTS(){
         return overdue;
     }
 
-    public long getPo_num() {
+    public String getPo_num() {
         return po_num;
     }
 
@@ -256,5 +263,7 @@ public void DTS(){
     public String getSupplier() {
         return supplier;
     }
+
+    public Uri getImageUri() { return imageUri; }
 
 }

@@ -19,6 +19,7 @@ import android.widget.ImageView;
 import java.io.IOException;
 
 public class ImageUploaderActivity extends AppCompatActivity {
+
     private Button chooseBn, uploadBn;
     private ImageView imageView;
     private final int imageRequest = 1;
@@ -29,38 +30,8 @@ public class ImageUploaderActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image_uploader);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
 
-        uploadBn = (Button)findViewById(R.id.uploadBn);
-        uploadBn.setOnClickListener((View.OnClickListener) ImageUploaderActivity.this);
-        chooseBn = (Button)findViewById(R.id.chooseBn);
-        chooseBn.setOnClickListener((View.OnClickListener) ImageUploaderActivity.this);
-        imageView = (ImageView)findViewById(R.id.imageView);
-    }
-/*
-    public void onClick (View v) {
-        switch (v.getId()) {
-            case R.id.chooseBn:
-                selectImage();
-                break;
-        }
-    }
-
-    private void selectImage() {
-        Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(intent, imageRequest);
     }
 
     @Override
@@ -79,7 +50,7 @@ public class ImageUploaderActivity extends AppCompatActivity {
             }
         }
     }
-*/
+
     private void uploadImg() {
 //        StringRequest stringRequest = new StringRequest(Request.Method.POST, UploadUrl, new Response.Listener<String>() {
 //            @Override

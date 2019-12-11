@@ -84,14 +84,28 @@
     <ProgressBar
         android:id="@+id/progressBar"
         style="?android:attr/progressBarStyle"
-        android:backgroundTint="#6b6b70"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="#004E4E4E"
+        android:backgroundTint="#6b6b70"
+        android:foregroundTint="#006D6D6D"
         android:progressTint="#00505050"
         android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@+id/userEmail"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView" />
+
+    <Switch
+        android:id="@+id/switch1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="3dp"
+        android:text="Admin"
+        app:layout_constraintBottom_toTopOf="@+id/signupbutton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/textView"
+        app:layout_constraintTop_toBottomOf="@+id/loginbutton" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

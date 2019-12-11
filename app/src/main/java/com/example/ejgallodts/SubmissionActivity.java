@@ -1,6 +1,7 @@
 package com.example.ejgallodts;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -9,24 +10,31 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.type.Date;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
+
+import static java.lang.Math.random;
 
 public class SubmissionActivity extends AppCompatActivity {
 
+    private static final int RESULT_LOAD_IMAGE = 1;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    DTS newDTS;
+    Uri submittedImage;
     Button submitButton;
     ProgressBar loadingSubmission;
     EditText defectName;
@@ -34,7 +42,6 @@ public class SubmissionActivity extends AppCompatActivity {
     EditText defectDescription;
     RadioButton defectIncidentClassFALSE;
     RadioButton defectIncidentClassTRUE;
-    EditText defectIncidentDate;
     EditText defectItemNum;
     EditText defectLotNum;
     EditText defectMaterialGrp;
@@ -51,16 +58,23 @@ public class SubmissionActivity extends AppCompatActivity {
     EditText defectSubDepartment;
     EditText defectSuppSuggCause;
     EditText defectSupplier;
-    EditText defectOverdue;
     EditText defectDepartment;
     CalendarView defectDate;
+    ImageButton submitPhoto;
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && data != null) {
+            Uri selectedImage = data.getData();
+            submittedImage = selectedImage;
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_submission);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
         submitButton = findViewById(R.id.submitbutton);
         loadingSubmission = findViewById(R.id.loadsubmit);
         defectName = findViewById(R.id.defectName);
@@ -68,7 +82,6 @@ public class SubmissionActivity extends AppCompatActivity {
         defectDescription = findViewById(R.id.defectDescription);
         defectIncidentClassTRUE = findViewById(R.id.class_yes);
         defectIncidentClassFALSE = findViewById(R.id.class_no);
-        defectIncidentDate = findViewById(R.id.defectIncidentDate);
         defectItemNum = findViewById(R.id.defectItemNum);
         defectLotNum = findViewById(R.id.defectLotNum);
         defectMaterialGrp = findViewById(R.id.defectMaterialGrp);
@@ -87,17 +100,19 @@ public class SubmissionActivity extends AppCompatActivity {
         defectSupplier = findViewById(R.id.defectSupplier);
         defectDepartment = findViewById(R.id.defectDepartment);
         defectDate = findViewById(R.id.calendarView);
+        submitPhoto = findViewById(R.id.imageButton);
 
         loadingSubmission.setVisibility(View.INVISIBLE);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        submitPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+            public void onClick(View v) {
+                Intent uploadImage = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(uploadImage, RESULT_LOAD_IMAGE);
             }
         });
+
+
 
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -110,12 +125,6 @@ public class SubmissionActivity extends AppCompatActivity {
                 if (defectName.getText().toString().isEmpty() || defectName.length() > 30) {     //name is longer than button length
                     Toast.makeText(SubmissionActivity.this, "Name Exceeds Character Limit", Toast.LENGTH_SHORT).show();
                 } else {
-
-                /*
-                if (defectPriority != 1 || defectPriority != 2 || defectPriority != 3) {    //invalid priority
-                    //error
-                }
-                */
 
                     long defectDateEnter = defectDate.getDate();
 
@@ -133,6 +142,14 @@ public class SubmissionActivity extends AppCompatActivity {
                         incident_class = false;
                     }
 
+                    boolean overdue;
+                    if (defectDateEnter < 0) {
+                        overdue = true;
+                    } else {
+                        overdue = false;
+                    }
+                    long id = new Random().nextLong();
+
                     CollectionReference IncidentsRef = db.collection("Incidents");
                     Map<String, Object> newDts = new HashMap<>();
                     newDts.put("defect_impact", defectImpact.getText().toString());
@@ -142,10 +159,11 @@ public class SubmissionActivity extends AppCompatActivity {
                     newDts.put("incident_class", incident_class);
                     newDts.put("incident_date", defectDateEnter);
                     newDts.put("item_num", defectItemNum.getText().toString());
-                    newDts.put("lot_num", defectLotNum.getText().toString());
+                    newDts.put("lot_num", Long.parseLong(defectLotNum.getText().toString()));
                     newDts.put("material_group", defectMaterialGrp.getText().toString());
-                    newDts.put("orderkey", defectOrderKey.getText().toString());
-                    //newDts.put("overdue", defectOverdue.getText().toString());
+                    newDts.put("orderkey", Long.parseLong(defectOrderKey.getText().toString()));
+                    newDts.put("overdue", overdue);
+                    newDts.put("id", id);
                     newDts.put("po_num", defectPONum.getText().toString());
                     newDts.put("primary_location", defectPrimaryLoc.getText().toString());
                     newDts.put("priority", priority);
@@ -155,8 +173,8 @@ public class SubmissionActivity extends AppCompatActivity {
                     newDts.put("subdepartment", defectSubDepartment.getText().toString());
                     newDts.put("supp_suggested_cause", defectSuppSuggCause.getText().toString());
                     newDts.put("supplier", defectSupplier.getText().toString());
+                    newDts.put("url", submittedImage.toString());
                     IncidentsRef.add(newDts);   //sends DTS to Database
-
 
                     loadingSubmission.setVisibility(View.INVISIBLE);
 
